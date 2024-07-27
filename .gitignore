@@ -1,0 +1,10 @@
+# Ignore all IntelliJ IDEA files and directories
+.idea/
+*.iml
+*.iws
+
+# Ignore specific IDEA system files
+out/
+
+# Go module files
+/vendor/
