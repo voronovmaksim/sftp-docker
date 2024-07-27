@@ -52,9 +52,17 @@ if [ $? -ne 0 ]; then
 fi
 
 ipAddress=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' "$cid")
+if [ -z "$ipAddress" ]; then
+    networkMode=$(docker inspect --format '{{ .HostConfig.NetworkMode }}' "$cid")
+    if [ "$networkMode" = "host" ]; then
+      ipAddress="127.0.0.1"
+    else
+        echo "ERROR: Can not determinate ipAddress of container. Check its network"
+    fi
+fi
 ssh-keygen -f "$HOME/.ssh/known_hosts" -R "$ipAddress"
 
-echo "Sftp-docker finished successfully."
+echo "Sftp-docker finished."
 echo "ADDRESS : sftp://root@$ipAddress"
 echo "PASSWORD: root"
 
